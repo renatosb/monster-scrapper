@@ -1,0 +1,42 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Wrapper (MANTER!)
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ / IDEs
+.idea/
+*.iml
+out/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# Kotlin
+*.class
+*.kotlin_module
+
+# Spring Boot
+*.jar
+*.war
+
+# Test
+coverage/
+reports/
+
+# Misc
+tmp/
+*.tmp
