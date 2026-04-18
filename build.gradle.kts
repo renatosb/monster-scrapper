@@ -13,9 +13,9 @@ repositories {
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
-
-    // 🔴 ESSENCIAL (resolve seu erro)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
+
+    implementation("org.jsoup:jsoup:1.17.2")
 
     testImplementation(kotlin("test"))
 }
