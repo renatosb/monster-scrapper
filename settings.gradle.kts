@@ -1,1 +1,1 @@
-rootProject.name = "initial-kotlin"
+rootProject.name = "monster-scrapper"

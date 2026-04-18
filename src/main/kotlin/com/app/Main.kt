@@ -1,8 +1,8 @@
-package com.seuprojeto
+package com.app
 
 class Main {
 
   fun main() {
-  
+
   }
 }
