@@ -1,6 +1,6 @@
 package com.app.scrapper.response
 
-data class StatsDTO(
+data class StatsResponse(
     val hp: Int,
     val attack: Int,
     val defense: Int,

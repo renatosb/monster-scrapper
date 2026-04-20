@@ -1,22 +1,23 @@
-package com.app.scrapper.functions
+package com.app.scrapper.scrapper
 
-import com.app.scrapper.response.StatsDTO
+import com.app.scrapper.response.SerebiiResponse
+import com.app.scrapper.response.StatsResponse
 import org.jsoup.nodes.Element
 
 object StatsScrapper {
 
-    fun getStatsBySerebiiDexTable(dexTables: List<Element>): StatsDTO {
+    fun getStats(serebiiResponse: SerebiiResponse): StatsResponse {
 
-        val statsTable = dexTables.firstOrNull { table ->
+        val statsTable = serebiiResponse.dexTables.firstOrNull { table ->
             table.select("tr").any { tr ->
                 tr.text().contains("Stats -", ignoreCase = true)
             }
-        } ?: throw IllegalStateException("Stats table não encontrada")
+        } ?: throw IllegalStateException("Stats table não encontrada: ${serebiiResponse.name}")
 
         val tdBaseStats = statsTable.select("tr")[2]
         val tds = tdBaseStats.select("td")
 
-        return StatsDTO(
+        return StatsResponse(
             tds[1].text().toInt(),
             tds[2].text().toInt(),
             tds[3].text().toInt(),

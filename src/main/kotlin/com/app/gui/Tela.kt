@@ -1,77 +1,92 @@
 package com.app.gui
 
 import com.app.enums.MonsterEnum
-import com.app.scrapper.functions.MovesScrapper
-import com.app.scrapper.functions.StatsScrapper
 import com.app.service.MonsterService
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.awt.GridLayout
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.Insets
 import javax.swing.*
+import javax.swing.SwingConstants.LEFT
 import javax.swing.text.DefaultCaret
 import kotlin.system.exitProcess
 
 class Tela : JFrame("Monster Scrapper") {
 
-    private val textArea: JTextArea
+    private val textArea: JTextArea = JTextArea(0, 0)
+    private val monsterList = JList(MonsterEnum.entries.toTypedArray())
     private val errorButton: JButton = JButton("Nothing")
     private val monsterService: MonsterService = MonsterService()
 
     init {
 
         defaultCloseOperation = EXIT_ON_CLOSE
-        setSize(600, 500)
+        setSize(400, 600)
         setLocationRelativeTo(null)
-        layout = GridLayout(0, 1)
+        layout = GridBagLayout()
+        isResizable = false
 
-        val buttonsPanel = JPanel()
-        buttonsPanel.layout = GridLayout(0, 1)
-        createAndAddButtons(buttonsPanel)
-        add(buttonsPanel)
+        val gbc = GridBagConstraints().apply {
+            fill = GridBagConstraints.BOTH
+            weightx = 1.0
+            weighty = 1.0
+            insets = Insets(5, 5, 5, 5)
+        }
 
-        textArea = JTextArea(0, 0)
-        textArea.isEditable = false
-        val caret = textArea.caret as DefaultCaret
-        caret.updatePolicy = DefaultCaret.NEVER_UPDATE
-
-        val scrollPane = JScrollPane(textArea)// Lambda listener
-
-        add(buttonsPanel)
-        add(scrollPane)
+        createMonsterList(this, gbc)
+        createAndAddButtons(this, gbc)
+        createTextArea(this, gbc)
     }
 
-    fun createAndAddButtons(buttonPanel: JPanel) {
+    fun createMonsterList(frame: JFrame, gbc: GridBagConstraints) {
 
-//        val finStatsBtn = JButton("Find Stats")
-//        val listOfMonsterUrls = MonsterEnum.entries
-//        val listOfMonsters = StatsScrapper.getMonster(
-//            StatsScrapper.createUrlsByMonsterName(listOfMonsterUrls)
-//        )
-//        finStatsBtn.addActionListener {
-//            textArea.text = ""
-//
-//            val json = Json { prettyPrint = true }
-//            val jsonString = json.encodeToString(listOfMonsters)
-//            textArea.append(jsonString)
-//        }
-//        buttonPanel.add(finStatsBtn)
-//
-//        val listMonstersBtn = JButton("List Monsters")
-//        listMonstersBtn.addActionListener {
-//            textArea.text = ""
-//
-//            textArea.append(StatsScrapper.getAllMonsters().toString())
-//        }
-//        buttonPanel.add(listMonstersBtn)
-
-        val debugButton = JButton("Debug")
-        debugButton.addActionListener {
-            MovesScrapper.getMoveBySerebiiDexTable()
+        monsterList.cellRenderer = DefaultListCellRenderer().apply {
+            horizontalAlignment = LEFT
         }
-        buttonPanel.add(debugButton)
 
-        val closeBtn = JButton("Close")
-        closeBtn.addActionListener { exitProcess(0) }
-        buttonPanel.add(closeBtn)
+        val scroll = JScrollPane(monsterList)
+
+        gbc.gridx = 0
+        gbc.gridy = 0
+        gbc.gridheight = 1
+        frame.add(scroll, gbc)
+    }
+
+    fun createAndAddButtons(frame: JFrame, gbc: GridBagConstraints) {
+
+        val json = Json { prettyPrint = true }
+        val debugButton = JButton("Buscar")
+        debugButton.addActionListener {
+            textArea.text = ""
+
+            val jsonString = json.encodeToString(
+                monsterService
+                    .getMonsterByName(monsterList.selectedValue)
+            )
+            textArea.append(jsonString)
+        }
+        gbc.gridx = 1
+        gbc.gridy = 0
+        gbc.gridheight = 1
+        frame.add(debugButton, gbc)
+    }
+
+    fun createTextArea(frame: JFrame, gbc: GridBagConstraints) {
+
+        textArea.apply {
+            lineWrap = true
+            wrapStyleWord = true
+            isEditable = false
+            textArea.isEditable = false
+        }
+        val caret = textArea.caret as DefaultCaret
+        caret.updatePolicy = DefaultCaret.NEVER_UPDATE
+        val scrollPane = JScrollPane(textArea)// Lambda listener
+        gbc.gridx = 0
+        gbc.gridy = 2
+        gbc.gridheight = 1
+        gbc.gridwidth = 2
+        frame.add(scrollPane, gbc)
     }
 }

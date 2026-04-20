@@ -1,5 +1,5 @@
 package com.app.scrapper.response
 
-data class MonsterNameResponse(
+data class AvailableMonsterResponse(
     val name: String,
 )

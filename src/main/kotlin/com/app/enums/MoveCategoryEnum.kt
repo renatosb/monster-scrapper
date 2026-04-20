@@ -1,5 +1,7 @@
 package com.app.enums
 
+import kotlin.math.E
+
 enum class MoveCategoryEnum(val displayName: String) {
 
     PHYSICAL("Physical"),
@@ -8,7 +10,12 @@ enum class MoveCategoryEnum(val displayName: String) {
 
     companion object {
         fun fromDisplayName(name: String): MoveCategoryEnum? {
-            return entries.find { it.displayName.equals(name, ignoreCase = true) }
+            return when (name) {
+                "Other" -> STATUS
+                else -> entries.find {
+                    it.displayName.equals(name, ignoreCase = true)
+                }
+            }
         }
     }
 }

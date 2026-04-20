@@ -11,7 +11,7 @@ data class Monster(
     val spAttack: Int,
     val spDefense: Int,
     val speed: Int,
-    val abilities: List<String>,
-    val moves: List<String>,
+    val abilities: List<Ability>,
+    val moves: List<Move>,
 ){
 }
